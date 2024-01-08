@@ -1,0 +1,8 @@
+user_import_job:
+  cron: "0 * * * *"
+  class: "UserImportJob"
+
+
+daily_record_job:
+  cron: "59 23 * * *"  # Runs every day at midnight
+  class: "DailyRecordJob"

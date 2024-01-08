@@ -1,0 +1,70 @@
+<!-- Display table of users with search and delete functionality -->
+<h2>Total User: <%= @users.count %><%= link_to "Report Page", report_path, style: "margin-left: 1000px;", class:  ["btn", "btn-primary"]%><h2>
+<%#= link_to "Report Page", report_path, style: "margin-left: 1200px;", class:  ["btn", "btn-primary"]%>
+
+<div class="container">
+  <div class="row">
+    <div class="col-5">
+      <div class="mb-3">
+        <input type="text" class="form-control" placeholder="Search users" id="searchInput">
+      </div>
+    </div>
+    <div class="col-2">
+      <button class="btn btn-outline-secondary" type="button" id="searchButton">Search</button>
+    </div>    
+  </div>
+  <table class="table table-striped" border="1" cellspacing="0">
+    <thead class="thead-dark">
+      <tr>
+        <th>Name</th>
+        <th>Age</th>
+        <th>Gender</th>
+        <th>Created At</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody id="userTable">
+      <% @users.each do |user| %>
+        <tr>
+          <td><%= user.full_name %></td>
+          <td><%= user.age %></td>
+          <td><%= user.gender %></td>
+          <td><%= user.created_at %></td>
+          <td>
+            <%= button_to 'Delete', user_path(user), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-sm delete-btn' %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<script>
+  document.getElementById("searchButton").addEventListener("click", function() {
+    let input = document.getElementById("searchInput");
+    let filter = input.value.toUpperCase();
+    let table = document.getElementById("userTable");
+    let tr = table.getElementsByTagName("tr");
+
+    for (let i = 0; i < tr.length; i++) {
+      let td = tr[i].getElementsByTagName("td")[0];
+      if (td) {
+        let txtValue = td.textContent || td.innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+          tr[i].style.display = "";
+        } else {
+          tr[i].style.display = "none";
+        }
+      }
+    }
+  });
+
+  let deleteButtons = document.querySelectorAll(".delete-btn");
+  deleteButtons.forEach(function(button) {
+    button.addEventListener("click", function(event) {
+      if (!confirm("Are you sure?")) {
+        event.preventDefault();
+      }
+    });
+  });
+</script>
